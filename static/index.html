@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>APIG TEST</title>
+    <meta name="description" content="Testing APIG Compression"/>
+    <meta name="author" content="Kyle138" />
+    <meta name="keywords" content="words words words" />
+    <style type="text/css">.body { width: auto; }</style>
+  </head>
+  <body>
+    <h1>Testing APIG...</h1>
+
+    <p><label style="font-weight: bold;" for="dataS">Record[3]: </label><span id="dataS"></span></p>
+
+    <p><label style="font-weight: bold;" for="numS">No of Recs: </label><span id="numS"></span></p>
+
+    <!-- Scripts -->
+    <script type="text/javascript">
+
+        async function getData() {
+          return await fetch('https://aza990w2q8.execute-api.us-east-1.amazonaws.com/dev1/test', { method: 'GET'})
+          .then(async (res) => {
+            if(res.ok) {
+              return await res.json();
+            } else {
+              let reserr=await res.json();
+              reserr = reserr.hasOwnProperty('response') ? reserr.response : reserr;
+              throw reserr;
+            }
+          })  // End fetch.then
+          .then((data) => {
+            console.log(data);  
+            document.getElementById("dataS").innerHTML = JSON.stringify(data[3],null,2);
+            document.getElementById("numS").innerHTML = data.length;
+          })  // End fetch.then.then
+          .catch((err) => {
+            console.error(err);
+          }); // End fetch.catch
+        } // End getData
+
+        async function autorun() {
+          console.log('PING!');
+          await getData();
+        } // End autorun
+          if (document.addEventListener)
+            document.addEventListener('DOMContentLoaded', autorun, false)
+          else window.onload = autorun
+    </script>
+  </body>
+</html>
